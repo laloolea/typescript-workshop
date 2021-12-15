@@ -1,25 +1,28 @@
 enum STATUS{ACTIVO,BAJA}
 //Creacion de la clase abstracta Persona
-// interface Person{
-//     nombre:string;
-//     edad:number;
-//     nac:Date;
-//     ciudad:string;
-//     pais:string;
-// }
-
-abstract class Persona/* implements Person*/{
-
-    protected _edad:number;
-    constructor(protected nombre:string,protected apellido:string, protected nac:Date, protected ciudad:string,protected pais:string){
+interface Person{
+    nombre:string;
+    apellido:string;
+    edad?:number;
+    nac:Date;
+    ciudad:string;
+    pais:string;
+}
+interface Student extends Person{
+    carrera:string;
+    campus:string;
+    status:number;
+    fechaIngreso:Date;
+}
+abstract class Persona{
+    constructor(protected persona:Person){
         //Se calcula la edad en base al año actual menos el año que nacio.
 
-
-        this._edad= new Date().getFullYear() - this.nac.getFullYear(); 
+        this.persona.edad = new Date().getFullYear() - this.persona.nac.getFullYear(); 
     }
        //Metodo para devover la edad
     public get edad(){
-        return this._edad;
+        return this.persona.edad;
     } 
   
 
@@ -27,24 +30,30 @@ abstract class Persona/* implements Person*/{
 
 //Creacion de la clase 
 class Estudiante extends Persona{
-    constructor(  nombre:string,  apellido:string,  nac:Date,  ciudad:string,   pais:string, protected carrera:string,protected campus:string,protected status:number,protected fechaIngreso:Date){
-        super(nombre,apellido,nac,ciudad,pais);
+    constructor( protected estudiante:Student){
+        super(estudiante);
         
     }
     //Metodo que devuelve datos de el estudiante
     getStudentData():string{
 
-        return `Nombre del alumno: ${this.nombre} ${this.apellido}, edad: ${this.edad}, campus: ${this.campus}`;
+        return `Nombre del alumno: ${this.estudiante.nombre} ${this.estudiante.apellido}, edad: ${this.estudiante.edad}, campus: ${this.estudiante.campus}`;
+    }
+
+    public getContext(){
+        return this.estudiante;
     }
 
 }
 
 //Creamos un alumno para probar la clase
-const lalo = new Estudiante("Eduardo","Gonzalez",new Date(1997, 12, 18),"Hermosillo","Mexico","Ciencias de la Computacion","Unison",STATUS.ACTIVO,new Date(2016, 7, 10));
+const laloInformation : Student= {nombre:"Eduardo",apellido:"Gonzalez",nac:new Date(1997, 12, 18),ciudad:"Hermosillo",pais:"Mexico",carrera:"Ciencias de la Computacion",campus:"Unison",status:STATUS.ACTIVO,fechaIngreso:new Date(2016, 7, 10)}
+const lalo = new Estudiante(laloInformation);
 
 //Se imprimem sus datos
-console.log(lalo);
+console.log(lalo.getStudentData());
 //se muestra su edad utilizando el .get
+console.log(lalo.getContext());
 console.log(lalo.edad); 
 //Mostramos sus datos
 console.log(lalo.getStudentData());

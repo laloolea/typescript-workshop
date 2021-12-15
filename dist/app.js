@@ -5,31 +5,29 @@ var STATUS;
     STATUS[STATUS["BAJA"] = 1] = "BAJA";
 })(STATUS || (STATUS = {}));
 class Persona {
-    constructor(nombre, apellido, nac, ciudad, pais) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.nac = nac;
-        this.ciudad = ciudad;
-        this.pais = pais;
-        this._edad = new Date().getFullYear() - this.nac.getFullYear();
+    constructor(persona) {
+        this.persona = persona;
+        this.persona.edad = new Date().getFullYear() - this.persona.nac.getFullYear();
     }
     get edad() {
-        return this._edad;
+        return this.persona.edad;
     }
 }
 class Estudiante extends Persona {
-    constructor(nombre, apellido, nac, ciudad, pais, carrera, campus, status, fechaIngreso) {
-        super(nombre, apellido, nac, ciudad, pais);
-        this.carrera = carrera;
-        this.campus = campus;
-        this.status = status;
-        this.fechaIngreso = fechaIngreso;
+    constructor(estudiante) {
+        super(estudiante);
+        this.estudiante = estudiante;
     }
     getStudentData() {
-        return `Nombre del alumno: ${this.nombre} ${this.apellido}, edad: ${this.edad}, campus: ${this.campus}`;
+        return `Nombre del alumno: ${this.estudiante.nombre} ${this.estudiante.apellido}, edad: ${this.estudiante.edad}, campus: ${this.estudiante.campus}`;
+    }
+    getContext() {
+        return this.estudiante;
     }
 }
-const lalo = new Estudiante("Eduardo", "Gonzalez", new Date(1997, 12, 18), "Hermosillo", "Mexico", "Ciencias de la Computacion", "Unison", STATUS.ACTIVO, new Date(2016, 7, 10));
-console.log(lalo);
+const laloInformation = { nombre: "Eduardo", apellido: "Gonzalez", nac: new Date(1997, 12, 18), ciudad: "Hermosillo", pais: "Mexico", carrera: "Ciencias de la Computacion", campus: "Unison", status: STATUS.ACTIVO, fechaIngreso: new Date(2016, 7, 10) };
+const lalo = new Estudiante(laloInformation);
+console.log(lalo.getStudentData());
+console.log(lalo.getContext());
 console.log(lalo.edad);
 console.log(lalo.getStudentData());
